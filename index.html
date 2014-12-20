@@ -145,10 +145,10 @@
 <joystick id="joystick" style="display: block;"></joystick>
 <script type="text/javascript">
 
-var seed = Math.floor(Math.random() * 9);
+var rnd_seed = Math.floor(Math.random() * 9);
 var canvas = document.getElementById("canvas");
 
-var world = new World(seed);
+var world = new World(rnd_seed);
 var player = new Player(world);
 var renderer = new Renderer(canvas, world, player);
 var save = new Save(world, player);
