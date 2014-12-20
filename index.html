@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MyCraft v1.0</title>
+<meta name="description" content="MyCraft: an HTML5 3D game built whith Cube Engine v1.0">
+<meta name="author" content="Adam Byrne">
+<meta name="version" content="v1.0">
+<meta name="keywords" content="Cube, Voxel, 3D, Free, Canvas, Online, Adam Byrne, Cube Engine">
+<meta charset="utf-8">
+
+<link type="text/css" rel="stylesheet" href="style/style.css">
+<script type="text/javascript" src="js/player.js"></script>
+<script type="text/javascript" src="js/save.js"></script>
+<script type="text/javascript" src="js/map.js"></script>
+<script type="text/javascript" src="js/node.js"></script>
+<script type="text/javascript" src="js/world.js"></script>
+<script type="text/javascript" src="js/render.js"></script>
+<script type="text/javascript" src="js/TouchControl.js"></script>
+<script type="text/javascript">
+	toggleJoystick = function (elem) {
+		if (elem.style.display === "none") {
+			elem.style.display = "block";
+		} else {
+			elem.style.display = "none";
+		}
+	}
+</script>
+
+</head>
+<body>
+
+  <div id="controls">
+	<h1>MyCraft v1.0</h1>
+    <ul>
+        <li><a href="https://github.com/AdamByrne/MyCraft">Download/View the source</a></li>
+    </ul>
+	<h2>Controls</h2>
+	<ul>
+		<li>WASD: Movement</li>
+		<li>Pg. Up: Up</li>
+		<li>Pg. Down: Down</li>
+		<li>Arrows: Rotation</li>
+		<li>Space: Jump</li>
+	</ul>
+	<h2>Options</h2>
+	<ul>
+		<li><u>H</u>UD: <input type="checkbox" checked="yes" onchange="renderer.hud = this.checked;" accesskey="h"></li>
+		<li><u>G</u>ravity: <input type="checkbox" checked="yes" onchange="player.gravity = this.checked;" accesskey="g"></li>
+		<li><u>C</u>ollision detection: <input type="checkbox" checked="yes" onclick="player.collision = this.checked;" accesskey="c"></li>
+		<li><u>P</u>erformace graph: <input type="checkbox" onchange="renderer.graph = this.checked;" accesskey="p"></li>
+		<li><u>M</u>ap: <input type="checkbox" onchange="renderer.map = this.checked;" accesskey="m"></li>
+		<li><input type="button" value="Lock pointer" onclick="renderer.lockPointer();"></li>
+		<li><input type="button" value="Joystick" onclick="toggleJoystick(document.getElementById('joystick'))"></li>
+		<li>Focal length:<br>
+			<input type="range" min="100" max="1000" value="500" onchange="renderer.focalLength = this.value">
+		</li>
+		<li>Render distance:<br>
+			<input type="range" min="20" max="1024" value="100" onchange="renderer.changeRenderDist(this.value);">
+		</li>
+		<li><u>R</u>ender mode:<br>
+			<select onchange="renderer.renderMode = this.value;" accesskey="r">
+				<option value="0">Plain color</option>
+				<option value="1" selected>Textured</option>
+			</select>
+		</li>
+		<li><u>T</u>ype:<br>
+			<select id="type" accesskey="t">
+				<optgroup label="Construction Blocks">
+					<option value="dirt">Dirt Block</option>
+					<option value="grass">Grass + Dirt Block</option>
+					<option value="stone">Smooth Stone</option>
+					<option value="cobblestone">Cobblestone Block</option>
+					<option value="wood">Wooden Log</option>
+					<option value="planks">Wooden planks</option>
+					<option value="sand">Sand Block</option>
+					<option value="sandstone">Sand Stone Block</option>
+					<option value="glass">Glass Block</option>
+					<option value="bricks">Bricks</option>
+					<option value="water">Water</option>
+					<option value="ice">Ice Block</option>
+					<option value="snow">Snow block</option>
+					<option value="leaves">Leaf Block</option>
+					<option value="lava">Lava</option>
+					<option value="gravel">Gravel Block</option>
+					<option value="obsidian">Obsidian Block</option>
+					<option value="stoneblock">Stone block</option>
+					<option value="cobweb">Cobweb Block</option>
+				</optgroup>
+				<optgroup label="Colored Wool + Cloth">
+					<option value="white">White Wool</option>
+					<option value="black">Black Wool</option>
+					<option value="darkgray">Dark gray Wool</option>
+					<option value="gray">Gray Wool</option>
+					<option value="red">Red Wool</option>
+					<option value="rose">Rose Wool</option>
+					<option value="green">Green Wool</option>
+					<option value="lime">Lime Wool</option>
+					<option value="brown">Brown Wool</option>
+					<option value="yellow">Yellow Wool</option>
+					<option value="blue">Blue Wool</option>
+					<option value="lightblue">Light blue Wool</option>
+					<option value="purple">Purple Wool</option>
+					<option value="magneta">Magenta Wool</option>
+					<option value="cyan">Cyan Wool</option>
+					<option value="orange">Orange Wool</option>
+				</optgroup>
+			</select>
+		</li>
+		<!--<li><input type="button" value="Screenshot" onclick="document.location = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');"></li>-->
+		<li>Generate world<br>
+			Seed <input type="text" id="seed" size="4" value="3">
+			<input type="button" value="Generate" onclick="world.newMap(document.getElementById('seed').value); player.spawn();">
+		</li>
+		<li>Save as<br>
+			<select id="saveas">
+				<option value="world1">world1</option>
+				<option value="world2">world2</option>
+				<option value="world3">world3</option>
+				<option value="world4">world4</option>
+				<option value="world5">world5</option>
+			</select>
+			<br>
+			<input type="button" value="Save" onclick="save.saveLocally(player);">
+			<input type="button" value="Save to file" onclick="save.saveToFile(player);">
+		</li>
+		<li>Load<br>
+			<select id="load">
+				<option value="world1">world1</option>
+				<option value="world2">world2</option>
+				<option value="world3">world3</option>
+				<option value="world4">world4</option>
+				<option value="world5">world5</option>
+			</select><br>
+			<input type="button" value="Load" onclick="save.loadLocalSave();">
+			<input type="button" value="Remove" onclick="save.removeLocalSave();">
+		</li>
+		<li>Load file<br>
+			<input type="button" value="Load file" onclick="document.getElementById('worldFile').click();">
+			<form id="upload"><input type="file" id="worldFile" onchange="save.loadFromFile(this.files[0]);" style="visibility: hidden;"></form>
+		</li>
+	</ul>
+</div>
+
+<canvas id="canvas" tabindex="1"></canvas>
+<joystick id="joystick" style="display: block;"></joystick>
+<script type="text/javascript">
+
+var seed = Math.floor(Math.random() * 9);
+var canvas = document.getElementById("canvas");
+
+var world = new World(seed);
+var player = new Player(world);
+var renderer = new Renderer(canvas, world, player);
+var save = new Save(world, player);
+
+</script>
+
+</body>
+</html>
