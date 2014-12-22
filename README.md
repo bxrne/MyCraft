@@ -8,3 +8,8 @@ MyCraft
 Librarys:
 
 Cube Engine: https://github.com/Nurgak/Cube-engine
+
+Demo
+====
+
+http://adambyrne.github.io/MyCraft
